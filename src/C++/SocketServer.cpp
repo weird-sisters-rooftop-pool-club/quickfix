@@ -40,16 +40,16 @@ namespace FIX
 class ServerWrapper : public SocketMonitor::Strategy
 {
 public:
-  ServerWrapper( std::set<int> sockets, SocketServer& server,
+  ServerWrapper( std::set<SOCKET> sockets, SocketServer& server,
                  SocketServer::Strategy& strategy )
 : m_sockets( sockets ), m_server( server ), m_strategy( strategy ) {}
 
 private:
-  void onConnect( SocketMonitor&, int socket )
+  void onConnect( SocketMonitor&, SOCKET socket )
   {
   }
 
-  void onEvent( SocketMonitor& monitor, int socket )
+  void onEvent( SocketMonitor& monitor, SOCKET socket )
   {
     if( m_sockets.find(socket) != m_sockets.end() )
     {
@@ -62,12 +62,12 @@ private:
     }
   }
 
-  void onWrite( SocketMonitor&, int socket )
+  void onWrite( SocketMonitor&, SOCKET socket )
   {
     m_strategy.onWrite( m_server, socket );
   }
 
-  void onError( SocketMonitor& monitor, int socket )
+  void onError( SocketMonitor& monitor, SOCKET socket )
   {
     m_strategy.onDisconnect( m_server, socket );
     monitor.drop( socket );
@@ -83,7 +83,7 @@ private:
     m_strategy.onTimeout( m_server );
   };
 
-  typedef std::set<int>
+  typedef std::set<SOCKET>
     Sockets;
 
   Sockets m_sockets;
@@ -94,14 +94,14 @@ private:
 SocketServer::SocketServer( int timeout )
 : m_monitor( timeout ) {}
 
-int SocketServer::add( int port, bool reuse, bool noDelay, 
+SOCKET SocketServer::add( int port, bool reuse, bool noDelay, 
                        int sendBufSize, int rcvBufSize )
   throw( SocketException& )
 {
   if( m_portToInfo.find(port) != m_portToInfo.end() )
     return m_portToInfo[port].m_socket;
 
-  int socket = socket_createAcceptor( port, reuse );
+  SOCKET socket = socket_createAcceptor( port, reuse );
   if( socket < 0 )
     throw SocketException();
   if( noDelay )
@@ -118,11 +118,12 @@ int SocketServer::add( int port, bool reuse, bool noDelay,
   return socket;
 }
 
-int SocketServer::accept( int socket )
+SOCKET SocketServer::accept( SOCKET socket )
 {
+
   SocketInfo info = m_socketToInfo[socket];
 
-  int result = socket_accept( socket );
+  SOCKET result = socket_accept( socket );
   if( info.m_noDelay )
     socket_setsockopt( result, TCP_NODELAY );
   if( info.m_sendBufSize )
@@ -139,7 +140,7 @@ void SocketServer::close()
   SocketToInfo::iterator i = m_socketToInfo.begin();
   for( ; i != m_socketToInfo.end(); ++i )
   {
-    int s = i->first;
+    SOCKET s = i->first;
     socket_close( s );
     socket_invalidate( s );
   }
@@ -147,7 +148,7 @@ void SocketServer::close()
 
 bool SocketServer::block( Strategy& strategy, bool poll, double timeout )
 {
-  std::set<int> sockets;
+  std::set<SOCKET> sockets;
   SocketToInfo::iterator i = m_socketToInfo.begin();
   for( ; i != m_socketToInfo.end(); ++i )
   {
@@ -161,14 +162,14 @@ bool SocketServer::block( Strategy& strategy, bool poll, double timeout )
   return true;
 }
 
-int SocketServer::socketToPort( int socket )
+int SocketServer::socketToPort( SOCKET socket )
 {
   SocketToInfo::iterator find = m_socketToInfo.find( socket );
   if( find == m_socketToInfo.end() ) return 0;
   return find->second.m_port;
 }
  
-int SocketServer::portToSocket( int port )
+SOCKET SocketServer::portToSocket( int port )
 {
   SocketToInfo::iterator find = m_portToInfo.find( port );
   if( find == m_portToInfo.end() ) return 0;

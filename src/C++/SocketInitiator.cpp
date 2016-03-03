@@ -34,8 +34,11 @@ SocketInitiator::SocketInitiator( Application& application,
                                   const SessionSettings& settings )
 throw( ConfigError )
 : Initiator( application, factory, settings ),
-  m_connector( 1 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 30 ), m_noDelay( false ), m_sendBufSize( 0 ),
+  m_connector( 1 ), 
+  m_lastConnect( 0 ),
+  m_reconnectInterval( 30 ), 
+  m_noDelay( false ), 
+  m_sendBufSize( 0 ),
   m_rcvBufSize( 0 ) 
 {
 }
@@ -46,8 +49,11 @@ SocketInitiator::SocketInitiator( Application& application,
                                   LogFactory& logFactory )
 throw( ConfigError )
 : Initiator( application, factory, settings, logFactory ),
-  m_connector( 1 ), m_lastConnect( 0 ),
-  m_reconnectInterval( 30 ), m_noDelay( false ), m_sendBufSize( 0 ),
+  m_connector( 1 ), 
+  m_lastConnect( 0 ),
+  m_reconnectInterval( 30 ), 
+  m_noDelay( false ), 
+  m_sendBufSize( 0 ),
   m_rcvBufSize( 0 )
 {
 }
@@ -142,7 +148,7 @@ void SocketInitiator::doConnect( const SessionID& s, const Dictionary& d )
     getHost( s, d, address, port );
 
     log->onEvent( "Connecting to " + address + " on port " + IntConvertor::convert((unsigned short)port) );
-    int result = m_connector.connect( address, port, m_noDelay, m_sendBufSize, m_rcvBufSize );
+    SOCKET result = m_connector.connect( address, port, m_noDelay, m_sendBufSize, m_rcvBufSize );
     setPending( s );
 
     m_pendingConnections[ result ] 
@@ -151,7 +157,7 @@ void SocketInitiator::doConnect( const SessionID& s, const Dictionary& d )
   catch ( std::exception& ) {}
 }
 
-void SocketInitiator::onConnect( SocketConnector&, int s )
+void SocketInitiator::onConnect( SocketConnector&, SOCKET s )
 {
   SocketConnections::iterator i = m_pendingConnections.find( s );
   if( i == m_pendingConnections.end() ) return;
@@ -163,7 +169,7 @@ void SocketInitiator::onConnect( SocketConnector&, int s )
   pSocketConnection->onTimeout();
 }
 
-void SocketInitiator::onWrite( SocketConnector& connector, int s )
+void SocketInitiator::onWrite( SocketConnector& connector, SOCKET s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return ;
@@ -172,7 +178,7 @@ void SocketInitiator::onWrite( SocketConnector& connector, int s )
     pSocketConnection->unsignal();
 }
 
-bool SocketInitiator::onData( SocketConnector& connector, int s )
+bool SocketInitiator::onData( SocketConnector& connector, SOCKET s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   if ( i == m_connections.end() ) return false;
@@ -180,7 +186,7 @@ bool SocketInitiator::onData( SocketConnector& connector, int s )
   return pSocketConnection->read( connector );
 }
 
-void SocketInitiator::onDisconnect( SocketConnector&, int s )
+void SocketInitiator::onDisconnect( SocketConnector&, SOCKET s )
 {
   SocketConnections::iterator i = m_connections.find( s );
   SocketConnections::iterator j = m_pendingConnections.find( s );

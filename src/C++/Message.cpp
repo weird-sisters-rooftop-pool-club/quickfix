@@ -177,7 +177,7 @@ std::string& Message::toString( std::string& str,
                                 int bodyLengthField, 
                                 int checkSumField ) const
 {
-  int length = bodyLength( beginStringField, bodyLengthField, checkSumField );
+  size_t length = bodyLength( beginStringField, bodyLengthField, checkSumField );
   m_header.setField( IntField(bodyLengthField, length) );
   m_trailer.setField( CheckSumField(checkSumField, checkSum(checkSumField)) );
 
@@ -493,7 +493,7 @@ void Message::validate()
     const BodyLength& aBodyLength = FIELD_GET_REF( m_header, BodyLength );
 
     const int expectedLength = (int)aBodyLength;
-    const int actualLength = bodyLength();
+    const size_t actualLength = bodyLength();
 
     if ( expectedLength != actualLength )
     {

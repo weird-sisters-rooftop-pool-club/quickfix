@@ -44,7 +44,7 @@ public:
   virtual ~SocketInitiator();
 
 private:
-  typedef std::map < int, SocketConnection* > SocketConnections;
+  typedef std::map < SOCKET, SocketConnection* > SocketConnections;
   typedef std::map < SessionID, int > SessionToHostNum;
 
   void onConfigure( const SessionSettings& ) throw ( ConfigError );
@@ -55,10 +55,10 @@ private:
   void onStop();
 
   void doConnect( const SessionID&, const Dictionary& d );
-  void onConnect( SocketConnector&, int );
-  void onWrite( SocketConnector&, int );
-  bool onData( SocketConnector&, int );
-  void onDisconnect( SocketConnector&, int );
+  void onConnect( SocketConnector&, SOCKET );
+  void onWrite( SocketConnector&, SOCKET );
+  bool onData( SocketConnector&, SOCKET );
+  void onDisconnect( SocketConnector&, SOCKET );
   void onError( SocketConnector& );
   void onTimeout( SocketConnector& );
 

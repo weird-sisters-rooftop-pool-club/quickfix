@@ -205,9 +205,9 @@ public:
 
   std::string& calculateString( std::string& ) const;
 
-  int calculateLength( int beginStringField = FIELD::BeginString,
-                       int bodyLengthField = FIELD::BodyLength,
-                       int checkSumField = FIELD::CheckSum ) const;
+  size_t calculateLength( int beginStringField = FIELD::BeginString,
+                          int bodyLengthField = FIELD::BodyLength,
+                          int checkSumField = FIELD::CheckSum ) const;
 
   int calculateTotal( int checkSumField = FIELD::CheckSum ) const;
 

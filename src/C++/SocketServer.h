@@ -38,14 +38,14 @@ namespace FIX
 struct SocketInfo
 {
   SocketInfo()
-  : m_socket( -1 ), m_port( 0 ), m_noDelay( false ),
+  : m_socket( INVALID_SOCKET ), m_port( 0 ), m_noDelay( false ),
     m_sendBufSize( 0 ), m_rcvBufSize( 0 ) {}
   
-  SocketInfo( int socket, short port, bool noDelay, int sendBufSize, int rcvBufSize )
+  SocketInfo(SOCKET socket, short port, bool noDelay, int sendBufSize, int rcvBufSize )
   : m_socket( socket ), m_port( port ), m_noDelay( noDelay ), 
     m_sendBufSize( sendBufSize ), m_rcvBufSize( rcvBufSize ) {}
 
-  int m_socket;
+  SOCKET m_socket;
   short m_port;
   bool m_noDelay;
   int m_sendBufSize;
@@ -60,20 +60,20 @@ public:
 
   SocketServer( int timeout = 0 );
 
-  int add( int port, bool reuse = false, bool noDelay = false, 
+  SOCKET add( int port, bool reuse = false, bool noDelay = false,
            int sendBufSize = 0, int rcvBufSize = 0 ) throw( SocketException& );
-  int accept( int socket );
+  SOCKET accept(SOCKET socket );
   void close();
   bool block( Strategy& strategy, bool poll = 0, double timeout = 0.0 );
 
   size_t numConnections() { return m_monitor.numSockets() - 1; }
   SocketMonitor& getMonitor() { return m_monitor; }
 
-  int socketToPort( int socket );
-  int portToSocket( int port );
+  int socketToPort( SOCKET socket );
+  SOCKET portToSocket( int port );
 
 private:
-  typedef std::map<int, SocketInfo>
+  typedef std::map<SOCKET, SocketInfo>
     SocketToInfo;
   typedef std::map<int, SocketInfo>
     PortToInfo;
@@ -87,10 +87,10 @@ public:
   {
   public:
     virtual ~Strategy() {}
-    virtual void onConnect( SocketServer&, int acceptSocket, int socket ) = 0;
-    virtual void onWrite( SocketServer&, int socket ) = 0;
-    virtual bool onData( SocketServer&, int socket ) = 0;
-    virtual void onDisconnect( SocketServer&, int socket ) = 0;
+    virtual void onConnect( SocketServer&, SOCKET acceptSocket, SOCKET socket ) = 0;
+    virtual void onWrite( SocketServer&, SOCKET socket ) = 0;
+    virtual bool onData( SocketServer&, SOCKET socket ) = 0;
+    virtual void onDisconnect( SocketServer&, SOCKET socket ) = 0;
     virtual void onError( SocketServer& ) = 0;
     virtual void onTimeout( SocketServer& ) {};
   };

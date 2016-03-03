@@ -52,20 +52,20 @@ public:
   SocketMonitor( int timeout = 0 );
   virtual ~SocketMonitor();
 
-  bool addConnect( int socket );
-  bool addRead( int socket );
-  bool addWrite( int socket );
-  bool drop( int socket );
-  void signal( int socket );
-  void unsignal( int socket );
+  bool addConnect( SOCKET socket );
+  bool addRead( SOCKET socket );
+  bool addWrite( SOCKET socket );
+  bool drop( SOCKET socket );
+  void signal( SOCKET socket );
+  void unsignal( SOCKET socket );
   void block( Strategy& strategy, bool poll = 0, double timeout = 0.0 );
 
   size_t numSockets() 
   { return m_readSockets.size() - 1; }
 
 private:
-  typedef std::set < int > Sockets;
-  typedef std::queue < int > Queue;
+  typedef std::set < SOCKET > Sockets;
+  typedef std::queue < SOCKET > Queue;
 
   void setsockopt();
   bool bind();
@@ -84,8 +84,8 @@ private:
   clock_t m_ticks;
 #endif
 
-  int m_signal;
-  int m_interrupt;
+  SOCKET m_signal;
+  SOCKET m_interrupt;
   Sockets m_connectSockets;
   Sockets m_readSockets;
   Sockets m_writeSockets;
@@ -97,10 +97,10 @@ public:
   public:
     virtual ~Strategy()
     {}
-    virtual void onConnect( SocketMonitor&, int socket ) = 0;
-    virtual void onEvent( SocketMonitor&, int socket ) = 0;
-    virtual void onWrite( SocketMonitor&, int socket ) = 0;
-    virtual void onError( SocketMonitor&, int socket ) = 0;
+    virtual void onConnect( SocketMonitor&, SOCKET socket ) = 0;
+    virtual void onEvent( SocketMonitor&, SOCKET socket ) = 0;
+    virtual void onWrite( SocketMonitor&, SOCKET socket ) = 0;
+    virtual void onError( SocketMonitor&, SOCKET socket ) = 0;
     virtual void onError( SocketMonitor& ) = 0;
     virtual void onTimeout( SocketMonitor& )
   {}}

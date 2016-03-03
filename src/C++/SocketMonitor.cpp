@@ -37,7 +37,7 @@ SocketMonitor::SocketMonitor( int timeout )
 {
   socket_init();
 
-  std::pair<int, int> sockets = socket_createpair();
+  std::pair<SOCKET, SOCKET> sockets = socket_createpair();
   m_signal = sockets.first;
   m_interrupt = sockets.second;
   socket_setnonblock( m_signal );
@@ -62,7 +62,7 @@ SocketMonitor::~SocketMonitor()
   socket_term();
 }
 
-bool SocketMonitor::addConnect( int s )
+bool SocketMonitor::addConnect( SOCKET s )
 {
   socket_setnonblock( s );
   Sockets::iterator i = m_connectSockets.find( s );
@@ -72,7 +72,7 @@ bool SocketMonitor::addConnect( int s )
   return true;
 }
 
-bool SocketMonitor::addRead( int s )
+bool SocketMonitor::addRead( SOCKET s )
 {
   socket_setnonblock( s );
   Sockets::iterator i = m_readSockets.find( s );
@@ -82,7 +82,7 @@ bool SocketMonitor::addRead( int s )
   return true;
 }
 
-bool SocketMonitor::addWrite( int s )
+bool SocketMonitor::addWrite( SOCKET s )
 {
   if( m_readSockets.find(s) == m_readSockets.end() )
     return false;
@@ -95,7 +95,7 @@ bool SocketMonitor::addWrite( int s )
   return true;
 }
 
-bool SocketMonitor::drop( int s )
+bool SocketMonitor::drop( SOCKET s )
 {
   Sockets::iterator i = m_readSockets.find( s );
   Sockets::iterator j = m_writeSockets.find( s );
@@ -165,12 +165,12 @@ bool SocketMonitor::sleepIfEmpty( bool poll )
     return false;
 }
 
-void SocketMonitor::signal( int socket )
+void SocketMonitor::signal( SOCKET socket )
 {
   socket_send( m_signal, (char*)&socket, sizeof(socket) );
 }
 
-void SocketMonitor::unsignal( int s )
+void SocketMonitor::unsignal( SOCKET s )
 {
   Sockets::iterator i = m_writeSockets.find( s );
   if( i == m_writeSockets.end() ) return;
@@ -229,10 +229,10 @@ void SocketMonitor::processReadSet( Strategy& strategy, fd_set& readSet )
 #ifdef _MSC_VER
   for ( unsigned i = 0; i < readSet.fd_count; ++i )
   {
-    int s = readSet.fd_array[ i ];
+    SOCKET s = readSet.fd_array[ i ];
     if( s == m_interrupt )
     {
-      int socket = 0;
+      SOCKET socket = 0;
       recv( s, (char*)&socket, sizeof(socket), 0 );
       addWrite( socket );
     }
@@ -268,7 +268,7 @@ void SocketMonitor::processWriteSet( Strategy& strategy, fd_set& writeSet )
 #ifdef _MSC_VER
   for ( unsigned i = 0; i < writeSet.fd_count; ++i )
   {
-    int s = writeSet.fd_array[ i ];
+    SOCKET s = writeSet.fd_array[ i ];
     if( m_connectSockets.find(s) != m_connectSockets.end() )
     {
       m_connectSockets.erase( s );
@@ -309,7 +309,7 @@ void SocketMonitor::processExceptSet( Strategy& strategy, fd_set& exceptSet )
 #ifdef _MSC_VER
   for ( unsigned i = 0; i < exceptSet.fd_count; ++i )
   {
-    int s = exceptSet.fd_array[ i ];
+    SOCKET s = exceptSet.fd_array[ i ];
     strategy.onError( *this, s );
   }
 #else

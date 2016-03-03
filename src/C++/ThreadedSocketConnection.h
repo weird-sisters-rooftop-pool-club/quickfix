@@ -46,14 +46,14 @@ class ThreadedSocketConnection : Responder
 public:
   typedef std::set<SessionID> Sessions;
 
-  ThreadedSocketConnection( int s, Sessions sessions, Log* pLog );
-  ThreadedSocketConnection( const SessionID&, int s, 
+  ThreadedSocketConnection( SOCKET s, Sessions sessions, Log* pLog );
+  ThreadedSocketConnection( const SessionID&, SOCKET s,
                             const std::string& address, short port, 
                             Log* pLog );
   virtual ~ThreadedSocketConnection() ;
 
   Session* getSession() const { return m_pSession; }
-  int getSocket() const { return m_socket; }
+  SOCKET getSocket() const { return m_socket; }
   bool connect();
   void disconnect();
   bool read();
@@ -64,7 +64,7 @@ private:
   bool send( const std::string& );
   bool setSession( const std::string& msg );
 
-  int m_socket;
+  SOCKET m_socket;
   char m_buffer[BUFSIZ];
 
   std::string m_address;

@@ -53,10 +53,10 @@ private:
   bool onPoll();
   void onStop();
 
-  void onConnect( SocketServer&, int, int );
-  void onWrite( SocketServer&, int );
-  bool onData( SocketServer&, int );
-  void onDisconnect( SocketServer&, int );
+  void onConnect( SocketServer&, SOCKET, SOCKET);
+  void onWrite( SocketServer&, SOCKET);
+  bool onData( SocketServer&, SOCKET);
+  void onDisconnect( SocketServer&, SOCKET);
   void onError( SocketServer& );
   void onTimeout( SocketServer& );
 

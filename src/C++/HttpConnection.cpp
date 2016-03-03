@@ -33,7 +33,7 @@ using namespace HTML;
 
 namespace FIX
 {
-HttpConnection::HttpConnection( int s )
+HttpConnection::HttpConnection( SOCKET s )
 : m_socket( s )
 {
   FD_ZERO( &m_fds );
@@ -61,7 +61,7 @@ bool HttpConnection::read()
   try
   {
     // Wait for input (1 second timeout)
-    int result = select( 1 + m_socket, &readset, 0, 0, &timeout );
+    int result = select( 1 + static_cast<int>(m_socket), &readset, 0, 0, &timeout );
 
     if( result > 0 ) // Something to read
     {

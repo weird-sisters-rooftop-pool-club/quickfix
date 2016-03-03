@@ -119,33 +119,33 @@ std::string string_strip( const std::string& value );
 
 void socket_init();
 void socket_term();
-int socket_createAcceptor( int port, bool reuse = false );
-int socket_createConnector();
-int socket_connect( int s, const char* address, int port );
-int socket_accept( int s );
-ssize_t socket_send( int s, const char* msg, size_t length );
-void socket_close( int s );
-bool socket_fionread( int s, int& bytes );
-bool socket_disconnected( int s );
-int socket_setsockopt( int s, int opt );
-int socket_setsockopt( int s, int opt, int optval );
-int socket_getsockopt( int s, int opt, int& optval );
+SOCKET socket_createAcceptor( int port, bool reuse = false );
+SOCKET socket_createConnector();
+int socket_connect( SOCKET s, const char* address, int port );
+int socket_accept(SOCKET s );
+ssize_t socket_send(SOCKET s, const char* msg, size_t length );
+void socket_close(SOCKET s );
+bool socket_fionread(SOCKET s, int& bytes );
+bool socket_disconnected(SOCKET s );
+int socket_setsockopt(SOCKET s, int opt );
+int socket_setsockopt(SOCKET s, int opt, int optval );
+int socket_getsockopt(SOCKET s, int opt, int& optval );
 #ifndef _MSC_VER
-int socket_fcntl( int s, int opt, int arg );
-int socket_getfcntlflag( int s, int arg );
-int socket_setfcntlflag( int s, int arg );
+int socket_fcntl(SOCKET s, int opt, int arg );
+int socket_getfcntlflag(SOCKET s, int arg );
+int socket_setfcntlflag(SOCKET s, int arg );
 #endif
-void socket_setnonblock( int s );
-bool socket_isValid( int socket );
+void socket_setnonblock(SOCKET s );
+bool socket_isValid(SOCKET socket );
 #ifndef _MSC_VER
-bool socket_isBad( int s );
+bool socket_isBad(SOCKET s );
 #endif
-void socket_invalidate( int& socket );
-short socket_hostport( int socket );
-const char* socket_hostname( int socket );
+void socket_invalidate(SOCKET & socket );
+short socket_hostport(SOCKET socket );
+const char* socket_hostname(SOCKET socket );
 const char* socket_hostname( const char* name );
-const char* socket_peername( int socket );
-std::pair<int, int> socket_createpair();
+const char* socket_peername(SOCKET socket );
+std::pair<SOCKET, SOCKET > socket_createpair();
 
 tm time_gmtime( const time_t* t );
 tm time_localtime( const time_t* t );
