@@ -171,7 +171,7 @@ int SocketServer::socketToPort( SOCKET socket )
  
 SOCKET SocketServer::portToSocket( int port )
 {
-  SocketToInfo::iterator find = m_portToInfo.find( port );
+  PortToInfo::iterator find = m_portToInfo.find( port );
   if( find == m_portToInfo.end() ) return 0;
   return find->second.m_socket;
 }
