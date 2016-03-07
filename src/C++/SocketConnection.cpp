@@ -34,8 +34,12 @@ namespace FIX
 {
 SocketConnection::SocketConnection( SOCKET s, Sessions sessions,
                                     SocketMonitor* pMonitor )
-: m_socket( s ), m_sendLength( 0 ),
-  m_sessions(sessions), m_pSession( 0 ), m_pMonitor( pMonitor )
+: m_socket( s ), 
+  m_sendLength( 0 ),
+  m_sessions(sessions), 
+  m_pSession( 0 ), 
+  m_pMonitor( pMonitor ),
+  m_maxDelayInSendQueue(-1)
 {
   FD_ZERO( &m_fds );
   FD_SET( m_socket, &m_fds );
@@ -47,7 +51,8 @@ SocketConnection::SocketConnection( SocketInitiator& i,
 : m_socket( s ), 
   m_sendLength( 0 ),
   m_pSession( i.getSession( sessionID, *this ) ),
-  m_pMonitor( pMonitor ) 
+  m_pMonitor( pMonitor ),
+  m_maxDelayInSendQueue(-1)
 {
   FD_ZERO( &m_fds );
   FD_SET( m_socket, &m_fds );
@@ -60,11 +65,12 @@ SocketConnection::~SocketConnection()
     Session::unregisterSession( m_pSession->getSessionID() );
 }
 
-bool SocketConnection::send( const std::string& msg )
+bool SocketConnection::send( const std::string& msg, long msgSeqNum)
 {
   Locker l( m_mutex );
 
-  m_sendQueue.push_back( msg );
+  m_sendQueue.emplace_back(std::make_tuple(time(NULL), msgSeqNum, msg));
+
   processQueue();
   signal();
   return true;
@@ -72,30 +78,81 @@ bool SocketConnection::send( const std::string& msg )
 
 bool SocketConnection::processQueue()
 {
+  bool forceDisconnect = false;
   Locker l( m_mutex );
 
-  if( !m_sendQueue.size() ) return true;
+  if( m_sendQueue.empty() ) return true;
 
   struct timeval timeout = { 0, 0 };
   fd_set writeset = m_fds;
   if( select( 1 + static_cast<int>(m_socket), 0, &writeset, 0, &timeout ) <= 0 )
     return false;
     
-  const std::string& msg = m_sendQueue.front();
-
-  size_t result = socket_send
-    ( m_socket, msg.c_str() + m_sendLength, msg.length() - m_sendLength );
-
-  if( result > 0 )
-    m_sendLength += result;
-
-  if( m_sendLength == msg.length() )
+  if (m_maxDelayInSendQueue==-1)
   {
-    m_sendLength = 0;
-    m_sendQueue.pop_front();
+    if (m_pSession)
+      m_maxDelayInSendQueue = m_pSession->getMaxDelayInSendQueue();
   }
 
-  return !m_sendQueue.size();
+  const auto& queuedMsg = m_sendQueue.front();
+  if (m_maxDelayInSendQueue>0)
+  {
+	  time_t now = time(NULL);
+	  if (difftime(now, std::get<0>(queuedMsg)) > m_maxDelayInSendQueue)
+	  {
+		  forceDisconnect = true;
+
+		  std::stringstream buf;
+		  buf << "Detected a delay greater than " << m_maxDelayInSendQueue << "s in send queue (size=" << m_sendQueue.size() << ").";
+		  std::string reason(buf.str());
+
+		  if (m_pSession)
+		  {
+			  Log * log = m_pSession->getLog();
+			  if (log)
+        {
+          log->onEvent(reason.c_str());
+			  }
+		  }
+	  }
+  }
+
+  if (!forceDisconnect)
+  {
+	  const std::string & msg = std::get<2>(queuedMsg);
+
+    ssize_t result = socket_send
+      ( m_socket, msg.c_str() + m_sendLength, (int)(msg.length() - m_sendLength) );
+
+    if( result > 0 )
+      m_sendLength += result;
+
+	  if( m_sendLength == msg.length() )
+	  {
+      m_sendLength = 0;
+      m_sendQueue.pop_front();
+    }
+    return m_sendQueue.empty();
+  }
+
+  if (m_pSession)
+  {
+    std::string disconnectReason = "Delay in send queue";
+
+    Message logout;
+    std::string messageString;
+    m_pSession->populateLogoutMessage(logout, std::get<1>(queuedMsg), disconnectReason);
+    logout.toString( messageString );
+
+    socket_send
+      ( m_socket, messageString.c_str() , (int)(messageString.length()) );
+
+    m_pSession->stateLogout();
+
+    m_sendQueue.clear();
+  }
+
+  return false;
 }
 
 void SocketConnection::disconnect()
@@ -162,6 +219,7 @@ bool SocketConnection::read( SocketAcceptor& a, SocketServer& s )
         return false;
       }
 
+      m_pSession->setClientRemoteAddr(socket_peername(m_socket));
       Session::registerSession( m_pSession->getSessionID() );
       return true;
     }
@@ -236,4 +294,10 @@ void SocketConnection::onTimeout()
 {
   if ( m_pSession ) m_pSession->next();
 }
+
+size_t SocketConnection::size()
+{
+  return m_sendQueue.size();
+}
+
 } // namespace FIX

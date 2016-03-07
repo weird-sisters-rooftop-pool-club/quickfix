@@ -54,6 +54,7 @@ Session::Session( Application& application,
   m_checkCompId( true ),
   m_checkLatency( true ), 
   m_maxLatency( 120 ),
+  m_sendResetSeqNumFlag(false),
   m_resetOnLogon( false ),
   m_resetOnLogout( false ), 
   m_resetOnDisconnect( false ),
@@ -64,7 +65,9 @@ Session::Session( Application& application,
   m_dataDictionaryProvider( dataDictionaryProvider ),
   m_messageStoreFactory( messageStoreFactory ),
   m_pLogFactory( pLogFactory ),
-  m_pResponder( 0 )
+  m_pResponder( 0 ),
+  m_clientRemoteAddr(""),
+  m_maxDelayInSendQueue(-1)
 {
   m_state.heartBtInt( heartBtInt );
   m_state.initiate( heartBtInt != 0 );
@@ -117,6 +120,10 @@ void Session::fill( Header& header )
   m_state.lastSentTime( now );
   header.setField( m_sessionID.getBeginString() );
   header.setField( m_sessionID.getSenderCompID() );
+
+  if(!getSenderSubID().empty())
+	  header.setField( SenderSubID(getSenderSubID()) );
+
   header.setField( m_sessionID.getTargetCompID() );
   header.setField( MsgSeqNum( getExpectedSenderNum() ) );
   insertSendingTime( header );
@@ -420,7 +427,7 @@ void Session::nextResendRequest( const Message& resendRequest, const UtcTimeStam
       if ( resend( msg ) )
       {
         if ( begin ) generateSequenceReset( begin, msgSeqNum );
-        send( msg.toString(messageString) );
+        send( msg.toString(messageString), msgSeqNum.getValue());
         m_state.onEvent( "Resending Message: "
                          + IntConvertor::convert( msgSeqNum ) );
         begin = 0;
@@ -452,7 +459,7 @@ void Session::nextResendRequest( const Message& resendRequest, const UtcTimeStam
 bool Session::send( Message& message )
 {
   message.getHeader().removeField( FIELD::PossDupFlag );
-  message.getHeader().removeField( FIELD::OrigSendingTime );
+  //message.getHeader().removeField( FIELD::OrigSendingTime );
   return sendRaw( message );
 }
 
@@ -500,7 +507,10 @@ bool Session::sendRaw( Message& message, int num )
         || msgType == "2" || msgType == "4"
         || isLoggedOn() )
       {
-        send( messageString );
+	    FIX::MsgSeqNum msgSeqNum;
+		header.getField( msgSeqNum );
+
+        send( messageString , msgSeqNum.getValue() );
       }
     }
     else
@@ -518,7 +528,12 @@ bool Session::sendRaw( Message& message, int num )
           persist( message, messageString );
 
         if ( isLoggedOn() )
-          send( messageString );
+		{
+			FIX::MsgSeqNum msgSeqNum;
+			header.getField( msgSeqNum );
+
+			send( messageString , msgSeqNum.getValue() );
+		}
       }
       catch ( DoNotSend& ) { return false; }
     }
@@ -532,11 +547,11 @@ bool Session::sendRaw( Message& message, int num )
   }
 }
 
-bool Session::send( const std::string& string )
+bool Session::send( const std::string& string, long msgSeqNum )
 {
   if ( !m_pResponder ) return false;
   m_state.onOutgoing( string );
-  return m_pResponder->send( string );
+  return m_pResponder->send( string, msgSeqNum );
 }
 
 void Session::disconnect()
@@ -913,6 +928,31 @@ void Session::generateLogout( const std::string& text )
   m_state.sentLogout( true );
 }
 
+
+void Session::populateLogoutMessage( Message& logout, long msgSeqNum, const std::string& text )
+{
+  Header& header = logout.getHeader();
+
+  header.setField( MsgType( MsgType_Logout ) );
+
+  UtcTimeStamp now;
+  m_state.lastSentTime( now );
+  header.setField( m_sessionID.getBeginString() );
+  header.setField( m_sessionID.getSenderCompID() );
+
+  if(!getSenderSubID().empty())
+	  header.setField( SenderSubID(getSenderSubID()) );
+
+  header.setField( m_sessionID.getTargetCompID() );
+
+  header.setField( MsgSeqNum( msgSeqNum ) );
+  insertSendingTime( header );
+
+  if ( text.length() )
+    logout.setField( Text( text ) );
+
+}
+
 void Session::populateRejectReason( Message& reject, int field,
                                     const std::string& text )
 {
@@ -933,6 +973,10 @@ void Session::populateRejectReason( Message& reject, int field,
   }
 }
 
+void Session::stateLogout()
+{
+  m_state.sentLogout( true );
+}
 void Session::populateRejectReason( Message& reject, const std::string& text )
 {
   reject.setField( Text( text ) );

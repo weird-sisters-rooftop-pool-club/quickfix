@@ -35,8 +35,9 @@ namespace FIX
   {
   public:
     virtual ~Responder() {}
-    virtual bool send( const std::string& ) = 0;
-    virtual void disconnect() = 0;
+    virtual bool send( const std::string&, long msgSeqNum ) = 0;
+    virtual void disconnect( ) = 0;
+    virtual size_t size() = 0;
   };
 }
 

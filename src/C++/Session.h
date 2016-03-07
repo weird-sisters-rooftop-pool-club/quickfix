@@ -159,6 +159,16 @@ public:
   void setLogoutTimeout ( int value )
     { m_state.logoutTimeout( value ); }
 
+  bool getSendResetSeqNumFlag()
+    { return m_sendResetSeqNumFlag; }
+  void setSendResetSeqNumFlag ( bool value )
+    { m_sendResetSeqNumFlag = value; }
+
+  int getMaxDelayInSendQueue()
+    { return m_maxDelayInSendQueue; }
+  void setMaxDelayInSendQueue ( int value )
+    { m_maxDelayInSendQueue = value; }
+
   bool getResetOnLogon()
     { return m_resetOnLogon; }
   void setResetOnLogon ( bool value )
@@ -194,6 +204,17 @@ public:
   void setValidateLengthAndChecksum ( bool value )
     { m_validateLengthAndChecksum = value; }
 
+  const std::string& getSenderSubID() const
+    { return m_senderSubID; }
+  void setSenderSubID(const std::string& value)
+    { m_senderSubID =  value; }
+
+  const std::string& getClientRemoteAddr() const
+	{ return m_clientRemoteAddr; }
+  void setClientRemoteAddr(const std::string& addr)
+	{ m_clientRemoteAddr = addr; }
+
+
   void setResponder( Responder* pR )
   {
     if( !checkSessionTime(UtcTimeStamp()) )
@@ -213,6 +234,8 @@ public:
 
   Log* getLog() { return &m_state; }
   const MessageStore* getStore() { return &m_state; }
+  
+  inline const size_t GetMessageQueueSize() const { return (m_pResponder==NULL)?0:m_pResponder->size(); }
 
 private:
   typedef std::map < SessionID, Session* > Sessions;
@@ -221,7 +244,7 @@ private:
   static bool addSession( Session& );
   static void removeSession( Session& );
 
-  bool send( const std::string& );
+  bool send( const std::string&, long );
   bool sendRaw( Message&, int msgSeqNum = 0 );
   bool resend( Message& message );
   void persist( const Message&, const std::string& ) throw ( IOException );
@@ -289,6 +312,11 @@ private:
   void generateBusinessReject( const Message&, int err, int field = 0 );
   void generateLogout( const std::string& text = "" );
 
+public:
+  void populateLogoutMessage( Message& logout, long msgSeqNum, const std::string& text = "");
+  void stateLogout();
+
+private:
   void populateRejectReason( Message&, int field, const std::string& );
   void populateRejectReason( Message&, const std::string& );
 
@@ -309,6 +337,7 @@ private:
   bool m_checkCompId;
   bool m_checkLatency;
   int m_maxLatency;
+  bool m_sendResetSeqNumFlag;
   bool m_resetOnLogon;
   bool m_resetOnLogout;
   bool m_resetOnDisconnect;
@@ -316,6 +345,9 @@ private:
   bool m_millisecondsInTimeStamp;
   bool m_persistMessages;
   bool m_validateLengthAndChecksum;
+  std::string m_senderSubID;
+  std::string m_clientRemoteAddr;
+  int m_maxDelayInSendQueue;
 
   SessionState m_state;
   DataDictionaryProvider m_dataDictionaryProvider;

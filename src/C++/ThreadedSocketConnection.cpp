@@ -64,7 +64,7 @@ ThreadedSocketConnection::~ThreadedSocketConnection()
   }
 }
 
-bool ThreadedSocketConnection::send( const std::string& msg )
+bool ThreadedSocketConnection::send( const std::string& msg, long msgSeqNum)
 {
   int totalSent = 0;
   while(totalSent < (int)msg.length())

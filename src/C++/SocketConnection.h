@@ -33,6 +33,8 @@
 #include "Utility.h"
 #include "Mutex.h"
 #include <set>
+#include <deque>
+#include <tuple>
 
 namespace FIX
 {
@@ -69,28 +71,30 @@ public:
   void unsignal()
   {
     Locker l( m_mutex );
-    if( m_sendQueue.size() == 0 )
+    if( m_sendQueue.empty() )
       m_pMonitor->unsignal( m_socket );
   }
 
   void onTimeout();
 
+  virtual size_t size();
+
 private:
-  typedef std::deque<std::string, ALLOCATOR<std::string> >
-    Queue;
+  typedef std::deque<std::tuple<time_t, long, std::string>, ALLOCATOR<std::tuple<time_t, long, std::string>>> Queue;
 
   bool isValidSession();
   void readFromSocket() throw( SocketRecvFailed );
   bool readMessage( std::string& msg );
   void readMessages( SocketMonitor& s );
-  bool send( const std::string& );
-  void disconnect();
+  bool send( const std::string&, long msgSeqNum );
+  void disconnect( );
 
   SOCKET m_socket;
   char m_buffer[BUFSIZ];
 
   Parser m_parser;
   Queue m_sendQueue;
+  int m_maxDelayInSendQueue;
   unsigned m_sendLength;
   Sessions m_sessions;
   Session* m_pSession;

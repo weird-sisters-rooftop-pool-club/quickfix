@@ -149,10 +149,12 @@ void SocketInitiator::doConnect( const SessionID& s, const Dictionary& d )
 
     log->onEvent( "Connecting to " + address + " on port " + IntConvertor::convert((unsigned short)port) );
     SOCKET result = m_connector.connect( address, port, m_noDelay, m_sendBufSize, m_rcvBufSize );
-    setPending( s );
 
-    m_pendingConnections[ result ] 
-      = new SocketConnection( *this, s, result, &m_connector.getMonitor() );
+    if( result != INVALID_SOCKET )
+    {
+      m_pendingConnections[ result ] 
+        = new SocketConnection( *this, s, result, &m_connector.getMonitor() );
+    }
   }
   catch ( std::exception& ) {}
 }

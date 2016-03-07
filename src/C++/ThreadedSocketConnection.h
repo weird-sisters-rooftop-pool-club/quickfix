@@ -61,8 +61,10 @@ public:
 private:
   bool readMessage( std::string& msg ) throw( SocketRecvFailed );
   void processStream();
-  bool send( const std::string& );
+  bool send( const std::string&, long msgSeqNum );
   bool setSession( const std::string& msg );
+
+  virtual size_t size();
 
   SOCKET m_socket;
   char m_buffer[BUFSIZ];
