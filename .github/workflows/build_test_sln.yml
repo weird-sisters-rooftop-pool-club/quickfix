@@ -106,7 +106,7 @@ jobs:
         env:
           CONFIGURATION: ${{ matrix.configrun }}
           PORT: ${{ matrix.port }}
-      - name: Run Performance Tests
+      - name: Run Performance tests
         if: ${{ matrix.configuration == 'Release' }}
         working-directory: ./${{ matrix.runner }}-${{ matrix.platform }}-${{ matrix.configuration }}/test
         run: |
