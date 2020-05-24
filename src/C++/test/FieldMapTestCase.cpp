@@ -37,7 +37,7 @@ SUITE(FieldMapTests)
 #if !defined(__GNUC__) || defined(__clang__)
 TEST(setMessageOrder)
 {
-  int order[] = {1, 2, 3};
+  int order[] = {1, 2, 3, 0}; // '0' is used to signify the end of array passed to FieldMap()
   FieldMap fieldMap(order);
   fieldMap.setField(3, "account");
   fieldMap.setField(1, "adv_id");
