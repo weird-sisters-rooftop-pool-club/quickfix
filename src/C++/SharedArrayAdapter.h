@@ -22,6 +22,10 @@
 #ifndef SHAREDARRAYADAPTER_H
 #define SHAREDARRAYADAPTER_H
 
+#include <memory>
+#include <utility>
+#include <cstdio>
+
 namespace FIX
 {
   template< typename T >
