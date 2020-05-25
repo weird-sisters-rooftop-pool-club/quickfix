@@ -22,7 +22,15 @@
 #ifndef CONFIG_SHARED_ARRAY_H
 #define CONFIG_SHARED_ARRAY_H
 
-#ifdef HAVE_STD_MAKE_SHARED_ARRAYS
+#if defined(__cplusplus) &&  __cplusplus >= 201103L
+#define HAVE_CXX_11
+#elif defined(_MSC_VER) && _MSC_VER >= 1400
+#define HAVE_CXX_11
+#endif
+
+#ifndef HAVE_CXX_11
+#define SharedArray FIX::shared_array
+#elif HAVE_STD_MAKE_SHARED_ARRAYS
 #define SharedArray shared_array_adapter_helper<make_shared_array_strategy>::type;
 #elif HAVE_STD_SHARED_PTR_ARRAYS
 #define SharedArray shared_array_adapter_helper<shared_ptr_array_strategy>::type;
