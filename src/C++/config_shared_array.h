@@ -23,21 +23,26 @@
 #define CONFIG_SHARED_ARRAY_H
 
 #if defined(__cplusplus) &&  __cplusplus >= 201103L
-#define HAVE_CXX_11
+#   define HAVE_CXX_11
 #elif defined(_MSC_VER) && _MSC_VER >= 1400
-#define HAVE_CXX_11
+#   define HAVE_CXX_11
 #endif
 
 #ifndef HAVE_CXX_11
-#define SharedArray FIX::shared_array
+#   define SharedArray FIX::shared_array
+#   include "AtomicCount.h"
 #elif HAVE_STD_MAKE_SHARED_ARRAYS
-#define SharedArray FIX::shared_array_adapter_helper<make_shared_array_strategy>::type
+#   define SharedArray FIX::shared_array_adapter_helper<make_shared_array_strategy>::type
+#   include "SharedArrayAdapter.h"
 #elif HAVE_STD_SHARED_PTR_ARRAYS
-#define SharedArray FIX::shared_array_adapter_helper<shared_ptr_array_strategy>::type
+#   define SharedArray FIX::shared_array_adapter_helper<shared_ptr_array_strategy>::type
+#   include "SharedArrayAdapter.h"
 #elif HAVE_STD_SHARED_PTR_CUSTOM_DELETER
-#define SharedArray FIX::shared_array_adapter_helper<shared_ptr_custom_deleter>::type
+#   define SharedArray FIX::shared_array_adapter_helper<shared_ptr_custom_deleter>::type
+#   include "SharedArrayAdapter.h"
 #else
-#define SharedArray FIX::shared_array
+#   define SharedArray FIX::shared_array
+#   include "AtomicCount.h"
 #endif
 
 #endif // CONFIG_SHARED_ARRAY_H

@@ -23,10 +23,7 @@
 #define SHARED_ARRAY
 
 #include "config-all.h"
-#ifdef HAVE_CXX_11
-#include "SharedArrayAdapter.h"
-#endif
-#include "AtomicCount.h"
+#include "config_shared_array.h"
 
 namespace FIX
 {
