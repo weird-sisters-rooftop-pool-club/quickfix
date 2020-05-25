@@ -33,7 +33,7 @@ namespace FIX
   {
     typedef std::shared_ptr< T[] > type;
 
-    type make_shared_array(std::size_t size)
+    static type make_shared_array(std::size_t size)
     {
       return std::make_shared< T[] >( size );
     }
@@ -44,7 +44,7 @@ namespace FIX
   {
     typedef std::shared_ptr< T[] > type;
 
-    type make_shared_array(std::size_t size)
+    static type make_shared_array(std::size_t size)
     {
       std::shared_ptr< T[] > array( new T[size] );
       return array;
@@ -75,7 +75,7 @@ namespace FIX
     { return m_array.get(); }
 
     bool empty() const
-    { return static_cast< bool >( m_array ); }
+    { return ! m_array; }
 
     static shared_array_adapter create(std::size_t size)
     {
