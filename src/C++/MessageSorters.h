@@ -147,7 +147,7 @@ private:
 
   cmp_mode m_mode;
   int m_delim;
-  shared_array<int> m_groupOrder;
+  SharedArray<int> m_groupOrder;
   int m_largest;
 };
 }
