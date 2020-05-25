@@ -22,6 +22,14 @@
 #ifndef CONFIG_SHARED_ARRAY_H
 #define CONFIG_SHARED_ARRAY_H
 
+#ifdef HAVE_STD_MAKE_SHARED_ARRAYS
+#define SharedArray shared_array_adapter_helper<make_shared_array_strategy>::type;
+#elif HAVE_STD_SHARED_PTR_ARRAYS
+#define SharedArray shared_array_adapter_helper<shared_ptr_array_strategy>::type;
+#elif HAVE_STD_SHARED_PTR_CUSTOM_DELETER
+#define SharedArray FIX::shared_array_adapter_helper<shared_ptr_custom_deleter>::type
+#else
 #define SharedArray FIX::shared_array
+#endif
 
 #endif // CONFIG_SHARED_ARRAY_H
