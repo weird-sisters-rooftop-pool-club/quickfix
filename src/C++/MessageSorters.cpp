@@ -48,7 +48,7 @@ message_order::message_order( int first, ... )
 
   if(size)
   {
-      m_groupOrder = shared_array<int>::create(m_largest + 1);
+      m_groupOrder = SharedArray<int>::create(m_largest + 1);
 
       va_start( arguments, first );
       field = first;
@@ -98,7 +98,7 @@ void message_order::setOrder( int size, const int order[] )
       m_largest = m_largest > field ? m_largest : field;
   }
 
-  m_groupOrder = shared_array<int>::create(m_largest + 1);
+  m_groupOrder = SharedArray<int>::create(m_largest + 1);
   for (int i = 0; i < size; ++i )
       m_groupOrder[ order[ i ] ] = i + 1;
 }
