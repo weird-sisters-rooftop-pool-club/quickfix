@@ -13,6 +13,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Accept
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Application.h ${CMAKE_SOURCE_DIR}/include/quickfix/Application.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/AtomicCount.h ${CMAKE_SOURCE_DIR}/include/quickfix/AtomicCount.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/config-all.h ${CMAKE_SOURCE_DIR}/include/quickfix/config-all.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/config_shared_array.h ${CMAKE_SOURCE_DIR}/include/quickfix/config_shared_array.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DatabaseConnectionID.h ${CMAKE_SOURCE_DIR}/include/quickfix/DatabaseConnectionID.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DatabaseConnectionPool.h ${CMAKE_SOURCE_DIR}/include/quickfix/DatabaseConnectionPool.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DataDictionary.h ${CMAKE_SOURCE_DIR}/include/quickfix/DataDictionary.h

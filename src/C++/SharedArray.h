@@ -23,6 +23,7 @@
 #define SHARED_ARRAY
 
 #include "config-all.h"
+#include "SharedArrayAdapter.h"
 #include "AtomicCount.h"
 
 namespace FIX

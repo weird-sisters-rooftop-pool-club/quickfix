@@ -105,6 +105,7 @@ libquickfix_la_SOURCES = \
 	Event.h \
 	Queue.h \
 	SharedArray.h \
+	SharedArrayAdapter.h \
 	Exceptions.h \
 	Utility.cpp \
 	Utility.h \
