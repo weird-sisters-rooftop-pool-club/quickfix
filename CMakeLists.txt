@@ -13,6 +13,14 @@ endif()
 project(${quickfix_PROJECT_NAME} VERSION 0.1 LANGUAGES CXX C)
 message("-- Project name ${CMAKE_PROJECT_NAME}")
 
+set(CXX_STANDARD "" CACHE STRING "C++ language standard")
+if (NOT "${CXX_STANDARD}" STREQUAL "")
+    message(STATUS "Setting CMAKE_CXX_STANDARD to ${CXX_STANDARD}")
+    set(CMAKE_CXX_STANDARD ${CXX_STANDARD})
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+endif ()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 include(QuickfixPlatformSettings)
