@@ -25,9 +25,15 @@
 #endif
 
 #include <UnitTest++.h>
-#include <SharedArray.h>
+#include "AtomicCount.h"
+#include "SharedArrayImpl.h"
 
 using namespace FIX;
+
+#ifdef SharedArray
+#undef SharedArray
+#endif
+#define SharedArray shared_array
 
 SUITE(SharedArrayTests)
 {
