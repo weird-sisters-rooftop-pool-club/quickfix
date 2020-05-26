@@ -31,6 +31,7 @@
 #ifndef HAVE_CXX_11
 #   define SharedArray FIX::shared_array
 #   include "AtomicCount.h"
+#   include "SharedArrayImpl.h"
 #elif HAVE_STD_MAKE_SHARED_ARRAYS
 #   define SharedArray FIX::shared_array_adapter_helper<make_shared_array_strategy>::type
 #   include "SharedArrayAdapter.h"
@@ -43,6 +44,7 @@
 #else
 #   define SharedArray FIX::shared_array
 #   include "AtomicCount.h"
+#   include "SharedArrayImpl.h"
 #endif
 
 #endif // CONFIG_SHARED_ARRAY_H

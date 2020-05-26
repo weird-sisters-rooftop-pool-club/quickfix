@@ -71,6 +71,8 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Sessio
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SessionState.h ${CMAKE_SOURCE_DIR}/include/quickfix/SessionState.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Settings.h ${CMAKE_SOURCE_DIR}/include/quickfix/Settings.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArray.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArray.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArrayAdapter.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArrayAdapter.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArrayImpl.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArrayImpl.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketAcceptor.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketAcceptor.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnection.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnection.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnector.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnector.h
