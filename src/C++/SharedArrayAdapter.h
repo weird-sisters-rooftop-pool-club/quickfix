@@ -71,7 +71,10 @@ namespace FIX
   public:
     shared_array_adapter() = default;
 
-    operator T * () const
+    operator const T * () const
+    { return m_array.get(); }
+
+    operator T * ()
     { return m_array.get(); }
 
     bool empty() const
@@ -79,7 +82,9 @@ namespace FIX
 
     static shared_array_adapter create(std::size_t size)
     {
-      return shared_array_adapter( ArrayStrategy::make_shared_array( size ) );
+      auto array = ArrayStrategy::make_shared_array( size );
+      std::fill(array.get(), array.get() + size, 0);
+      return shared_array_adapter( std::move( array ) );
     }
 
   private:
