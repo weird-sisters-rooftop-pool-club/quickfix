@@ -29,11 +29,12 @@ libquickfixcpptest_la_SOURCES = \
     SessionIDTestCase.cpp \
     SessionSettingsTestCase.cpp \
     SessionStateTestCase.cpp \
-    SessionTestCase.cpp \
-    SessionFactoryTestCase.cpp \
-    SettingsTestCase.cpp \
-    SharedArrayTestCase.cpp \
-    SocketAcceptorTestCase.cpp \
+	SessionTestCase.cpp \
+	SessionFactoryTestCase.cpp \
+	SettingsTestCase.cpp \
+	SharedArrayTestCase.cpp \
+	SharedArrayAdapterTestCase.cpp \
+	SocketAcceptorTestCase.cpp \
     SocketConnectionTestCase.cpp \
     SocketConnectorTestCase.cpp \
     SocketMonitorTestCase.cpp \
