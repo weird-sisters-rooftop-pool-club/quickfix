@@ -93,6 +93,7 @@ TEST_FIXTURE(socketServerFixture, accept)
   CHECK( s3 >= 0 );
   object.block( *this );
   CHECK( object.numConnections() == 3 );
+  // TODO
 
   SocketMonitor& monitor = object.getMonitor();
   CHECK( !monitor.drop( -1 ) );

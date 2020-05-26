@@ -80,19 +80,24 @@ namespace FIX
     bool empty() const
     { return ! m_array; }
 
+    std::size_t size() const
+    { return m_size; }
+
     static shared_array_adapter create(std::size_t size)
     {
       auto array = ArrayStrategy::make_shared_array( size );
       std::fill(array.get(), array.get() + size, 0);
-      return shared_array_adapter( std::move( array ) );
+      return shared_array_adapter( std::move( array ), size );
     }
 
   private:
-    shared_array_adapter( ArrayType array )
+    shared_array_adapter( ArrayType array, std::size_t size )
       : m_array( std::move( array ) )
+      , m_size( size )
     { }
 
     ArrayType m_array;
+    std::size_t m_size = 0;
   };
 
   template< template < typename  > class AS >

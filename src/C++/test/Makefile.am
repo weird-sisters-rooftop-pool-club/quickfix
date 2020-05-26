@@ -33,6 +33,7 @@ libquickfixcpptest_la_SOURCES = \
 	SessionFactoryTestCase.cpp \
 	SettingsTestCase.cpp \
 	SharedArrayTestCase.cpp \
+	SharedArrayAdapterTestCase.cpp \
 	SocketAcceptorTestCase.cpp \
     SocketConnectionTestCase.cpp \
 	SocketConnectorTestCase.cpp \
