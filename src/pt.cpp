@@ -36,12 +36,14 @@
 #include "SessionID.h"
 #include "Session.h"
 #include "DataDictionary.h"
-#include "Parser.h"
 #include "Utility.h"
 #include "SocketAcceptor.h"
 #include "SocketInitiator.h"
 #include "ThreadedSocketAcceptor.h"
 #include "ThreadedSocketInitiator.h"
+#include "AtomicCount.h"
+#include "SharedArrayImpl.h"
+#include "SharedArrayAdapter.h"
 #include "fix42/Heartbeat.h"
 #include "fix42/NewOrderSingle.h"
 #include "fix42/QuoteRequest.h"
@@ -50,6 +52,8 @@ long testIntegerToString( int );
 long testStringToInteger( int );
 long testDoubleToString( int );
 long testStringToDouble( int );
+template< template< typename > class ArrayType >
+long testSharedArray( int );
 long testCreateHeartbeat( int );
 long testIdentifyType( int );
 long testSerializeToStringHeartbeat( int );
@@ -127,6 +131,24 @@ int main( int argc, char** argv )
 
   std::cout << "Converting strings to doubles: ";
   report( testStringToDouble( count ), count );
+
+  std::cout << "Copying and destroying shared array (Atomic Count): ";
+  report( testSharedArray< FIX::shared_array >( count ), count);
+
+#ifdef HAVE_STD_MAKE_SHARED_ARRAYS
+  std::cout << "Copying and destroying shared array (make shared arrays): ";
+  report( testSharedArray< FIX::shared_array_adapter_helper<FIX::make_shared_array_strategy>::type >( count ), count);
+#endif
+
+#ifdef HAVE_STD_SHARED_PTR_ARRAYS
+  std::cout << "Copying and destroying shared array (shared ptr arrays): ";
+  report( testSharedArray< FIX::shared_array_adapter_helper<FIX::shared_ptr_array_strategy>::type >( count ), count);
+#endif
+
+#ifdef HAVE_STD_SHARED_PTR_CUSTOM_DELETER
+  std::cout << "Copying and destroying shared array (custom deleter): ";
+  report( testSharedArray< FIX::shared_array_adapter_helper<FIX::shared_ptr_custom_deleter>::type >( count ), count);
+#endif
 
   std::cout << "Creating Heartbeat messages: ";
   report( testCreateHeartbeat( count ), count );
@@ -250,6 +272,28 @@ long testStringToDouble( int count )
   {
     FIX::DoubleConvertor::convert( value );
   }
+  return GetTickCount() - start;
+}
+
+
+template< template< typename > class ArrayType >
+long testSharedArray( int count )
+{
+  long start = GetTickCount();
+
+  using shared_array_type = ArrayType< int >;
+  auto array = shared_array_type::create( count );
+  array[count - 1] = 666;
+  std::vector< shared_array_type > vec( count, array );
+  auto copy = vec;
+  for ( const auto & e : copy )
+  {
+    if ( e[ count - 1 ] != 666 )
+    {
+      std::terminate( );
+    }
+  }
+
   return GetTickCount() - start;
 }
 
