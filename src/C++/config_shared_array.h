@@ -28,7 +28,7 @@
 #   define HAVE_CXX_11
 #endif
 
-#ifndef HAVE_CXX_11
+#if ! defined(HAVE_CXX_11) || defined(HAVE_ATOMIC_COUNT)
 #   define SharedArray FIX::shared_array
 #   include "AtomicCount.h"
 #   include "SharedArrayImpl.h"

@@ -21,6 +21,12 @@ if (NOT "${CXX_STANDARD}" STREQUAL "")
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif ()
 
+option(HAVE_ATOMIC_COUNT "Force use of specific x86/x64 atomic count" OFF)
+if (HAVE_ATOMIC_COUNT)
+    message(STATUS "Setting HAVE_ATOMIC_COUNT")
+    add_definitions("-DHAVE_ATOMIC_COUNT=1")
+endif ()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 include(QuickfixPlatformSettings)
