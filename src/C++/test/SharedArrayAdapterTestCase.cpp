@@ -24,16 +24,13 @@
 #include "config.h"
 #endif
 
-#include <UnitTest++.h>
+#include <gtest/gtest.h>
 #include "SharedArrayAdapter.h"
 
 using namespace FIX;
 
-SUITE(SharedArrayAdapterTests)
-{
-
 #ifdef HAVE_STD_MAKE_SHARED_ARRAYS
-TEST(SharedArrayAdapterStdMakeSharedArraysEqualsOperator_SharedArraySetEqualToItself)
+TEST(SharedArrayAdapterTests, SharedArrayAdapterStdMakeSharedArraysEqualsOperator_SharedArraySetEqualToItself)
 {
   using shared_array = shared_array_adapter_helper<make_shared_array_strategy>::type<std::string>;
   shared_array shared;
@@ -41,22 +38,22 @@ TEST(SharedArrayAdapterStdMakeSharedArraysEqualsOperator_SharedArraySetEqualToIt
 
   shared = *pShared;
 
-  CHECK_EQUAL(*pShared, shared);
+  ASSERT_EQ(*pShared, shared);
 }
 #endif
 
 #ifdef HAVE_STD_MAKE_SHARED_ARRAYS
-TEST(CreateSharedArrayAdapterStdMakeSharedArrays_SizeZeroArray)
+TEST(SharedArrayAdapterTests, CreateSharedArrayAdapterStdMakeSharedArrays_SizeZeroArray)
 {
   using shared_array = shared_array_adapter_helper<make_shared_array_strategy>::type<std::string>;
   shared_array shared = shared_array::create(0);
 
-  CHECK_EQUAL(0, (int) shared.size());
+  ASSERT_EQ(0, (int) shared.size());
 }
 #endif
 
 #ifdef HAVE_STD_SHARED_PTR_ARRAYS
-TEST(SharedArrayAdapterStdSharedPtrArraysEqualsOperator_SharedArraySetEqualToItself)
+TEST(SharedArrayAdapterTests, SharedArrayAdapterStdSharedPtrArraysEqualsOperator_SharedArraySetEqualToItself)
 {
   using shared_array = shared_array_adapter_helper<shared_ptr_array_strategy>::type<std::string>;
   shared_array shared;
@@ -64,22 +61,22 @@ TEST(SharedArrayAdapterStdSharedPtrArraysEqualsOperator_SharedArraySetEqualToIts
 
   shared = *pShared;
 
-  CHECK_EQUAL(*pShared, shared);
+  ASSERT_EQ(*pShared, shared);
 }
 #endif
 
 #ifdef HAVE_STD_SHARED_PTR_ARRAYS
-TEST(CreateSharedArrayAdapterStdSharedPtrArrays_SizeZeroArray)
+TEST(SharedArrayAdapterTests, CreateSharedArrayAdapterStdSharedPtrArrays_SizeZeroArray)
 {
   using shared_array = shared_array_adapter_helper<shared_ptr_array_strategy>::type<std::string>;
   shared_array shared = shared_array::create(0);
 
-  CHECK_EQUAL(0, (int) shared.size());
+  ASSERT_EQ(0, (int) shared.size());
 }
 #endif
 
 #ifdef HAVE_STD_SHARED_PTR_CUSTOM_DELETER
-TEST(SharedArrayAdapterStdSharedPtrCustomDeleterEqualsOperator_SharedArraySetEqualToItself)
+TEST(SharedArrayAdapterTests, SharedArrayAdapterStdSharedPtrCustomDeleterEqualsOperator_SharedArraySetEqualToItself)
 {
   using shared_array = shared_array_adapter_helper<shared_ptr_custom_deleter>::type<std::string>;
   shared_array shared;
@@ -87,18 +84,16 @@ TEST(SharedArrayAdapterStdSharedPtrCustomDeleterEqualsOperator_SharedArraySetEqu
 
   shared = *pShared;
 
-  CHECK_EQUAL(*pShared, shared);
+  ASSERT_EQ(*pShared, shared);
 }
 #endif
 
 #ifdef HAVE_STD_SHARED_PTR_CUSTOM_DELETER
-TEST(CreateSharedArrayAdapterStdSharedPtrCustomDeleter_SizeZeroArray)
+TEST(SharedArrayAdapterTests, CreateSharedArrayAdapterStdSharedPtrCustomDeleter_SizeZeroArray)
 {
   using shared_array = shared_array_adapter_helper<shared_ptr_custom_deleter>::type<std::string>;
   shared_array shared = shared_array::create(0);
 
-  CHECK_EQUAL(0, (int) shared.size());
+  ASSERT_EQ(0, (int) shared.size());
 }
 #endif
-
-}
