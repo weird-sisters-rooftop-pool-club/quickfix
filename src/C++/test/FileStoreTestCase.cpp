@@ -141,6 +141,7 @@ TEST_F(resetBeforeAndAfterWithTestFileManager, FileStoreCreationTime) {
   ASSERT_EQ(currentTimeStamp.getYear(), timeStamp.getYear());
 }
 
+#ifndef _MSC_VER
 TEST_F(resetBeforeAndAfterWithTestFileManager, FileStoreFactory_FileStoreFromDictionary) {
   SessionID sessionID( BeginString( "FIX.4.2" ),
       SenderCompID( "SETGET" ), TargetCompID( "TEST" ), "Test" );
@@ -156,3 +157,4 @@ TEST_F(resetBeforeAndAfterWithTestFileManager, FileStoreFactory_FileStoreFromDic
   ASSERT_NO_THROW(fileStore.reset(fileStoreFactory.create(sessionID)));
   ASSERT_TRUE(fileStore.get() != nullptr);
 }
+#endif // _MSC_VER
