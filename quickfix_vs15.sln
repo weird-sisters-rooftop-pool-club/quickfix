@@ -15,14 +15,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_performance", "src\test_performance_vs15.vcxproj", "{4E6CE474-47A1-4AC8-8161-9CD214664EBB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_unit", "src\test_unit_vs15.vcxproj", "{CD58A1FF-0F7A-4490-B9B4-944326C48A5A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_acceptance_runner", "test\atrun\test_acceptance_runner_vs15.vcxproj", "{A58C8BD5-3602-4886-80A0-CD4FFED42144}"
-	ProjectSection(ProjectDependencies) = postProject
-		{64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6} = {64A4FEFE-0461-4E95-8CC1-91EF5F57DBC6}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
