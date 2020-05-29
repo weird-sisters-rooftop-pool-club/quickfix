@@ -1,6 +1,6 @@
 add_subdirectory(C++)
 
-if( WIN32 OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+if( WIN32 OR APPLE OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
 
 add_executable(at at.cpp getopt.c)
 
