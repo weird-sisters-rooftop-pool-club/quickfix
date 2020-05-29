@@ -13,6 +13,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Accept
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Application.h ${CMAKE_SOURCE_DIR}/include/quickfix/Application.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/AtomicCount.h ${CMAKE_SOURCE_DIR}/include/quickfix/AtomicCount.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/config-all.h ${CMAKE_SOURCE_DIR}/include/quickfix/config-all.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/config_shared_array.h ${CMAKE_SOURCE_DIR}/include/quickfix/config_shared_array.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DatabaseConnectionID.h ${CMAKE_SOURCE_DIR}/include/quickfix/DatabaseConnectionID.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DatabaseConnectionPool.h ${CMAKE_SOURCE_DIR}/include/quickfix/DatabaseConnectionPool.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DataDictionary.h ${CMAKE_SOURCE_DIR}/include/quickfix/DataDictionary.h
@@ -70,6 +71,8 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Sessio
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SessionState.h ${CMAKE_SOURCE_DIR}/include/quickfix/SessionState.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Settings.h ${CMAKE_SOURCE_DIR}/include/quickfix/Settings.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArray.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArray.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArrayAdapter.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArrayAdapter.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SharedArrayImpl.h ${CMAKE_SOURCE_DIR}/include/quickfix/SharedArrayImpl.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketAcceptor.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketAcceptor.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnection.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnection.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnector.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnector.h

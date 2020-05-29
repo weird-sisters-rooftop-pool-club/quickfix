@@ -81,7 +81,7 @@ struct trailer_order
 /// Sorts fields in correct group order
 struct group_order
 {
-  static bool compare( const int x, const int y, int* order, int largest )
+  static bool compare( const int x, const int y, const int* order, int largest )
   {
     if ( x <= largest && y <= largest )
     {
@@ -147,7 +147,7 @@ private:
 
   cmp_mode m_mode;
   int m_delim;
-  shared_array<int> m_groupOrder;
+  SharedArray<int> m_groupOrder;
   int m_largest;
 };
 }

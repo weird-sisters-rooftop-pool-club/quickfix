@@ -247,6 +247,33 @@ AC_TRY_COMPILE(
 	The system supports std::shared_ptr),
 	AC_MSG_RESULT(no))
 
+AC_MSG_CHECKING(for std::shared_ptr<T>::shared_ptr(T*, Deleter))
+AC_TRY_COMPILE(
+	[#include <memory>],
+	[std::shared_ptr<int> ptr(new int[10], std::default_delete<int[]>());],
+	AC_MSG_RESULT(yes)
+	AC_DEFINE(HAVE_STD_SHARED_PTR_CUSTOM_DELETER, 1,
+	The system supports std::shared_ptr<T[]>),
+	AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for std::shared_ptr<T[]>::shared_ptr(T[]))
+AC_TRY_COMPILE(
+	[#include <memory>],
+	[std::shared_ptr<int[]> ptr(new int[10]);],
+	AC_MSG_RESULT(yes)
+	AC_DEFINE(HAVE_STD_SHARED_PTR_ARRAYS, 1,
+	The system supports std::shared_ptr<T[]>),
+	AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for std::shared_ptr<T[]> std::make_shared<T[]>(std::size_t))
+AC_TRY_COMPILE(
+	[#include <memory>],
+	[std::shared_ptr<T[]> sh_array = std::make_shared<T[]>(std::size_t);],
+	AC_MSG_RESULT(yes)
+	AC_DEFINE(HAVE_STD_MAKE_SHARED_ARRAYS, 1,
+	The system supports std::shared_ptr<T[]> std::make_shared<T[]>(std::size_t)),
+	AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for boost::shared_ptr)
 AC_TRY_COMPILE(
         [#include <boost/shared_ptr.hpp>],
