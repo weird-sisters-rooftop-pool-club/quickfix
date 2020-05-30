@@ -27,6 +27,7 @@
 #endif
 
 #include <memory>
+#include <thread>
 #include "getopt-repl.h"
 #include <iostream>
 #include "Application.h"
@@ -52,6 +53,8 @@ long testIntegerToString( int );
 long testStringToInteger( int );
 long testDoubleToString( int );
 long testStringToDouble( int );
+template< template< typename > class ArrayType, std::size_t >
+long testSharedArrayMultiThreaded( int );
 template< template< typename > class ArrayType >
 long testSharedArray( int );
 long testCreateHeartbeat( int );
@@ -148,6 +151,24 @@ int main( int argc, char** argv )
 #ifdef HAVE_STD_SHARED_PTR_CUSTOM_DELETER
   std::cout << "Copying and destroying shared array (custom deleter): ";
   report( testSharedArray< FIX::shared_array_adapter_helper<FIX::shared_ptr_custom_deleter>::type >( count ), count);
+#endif
+
+  std::cout << "Copying and destroying shared array multi-threaded (Atomic Count): ";
+  report( testSharedArrayMultiThreaded< FIX::shared_array, 50000 >( count ), count);
+
+#ifdef HAVE_STD_MAKE_SHARED_ARRAYS
+  std::cout << "Copying and destroying shared array multi-threaded (make shared arrays): ";
+  report( testSharedArrayMultiThreaded< FIX::shared_array_adapter_helper<FIX::make_shared_array_strategy>::type, 50000 >( count ), count);
+#endif
+
+#ifdef HAVE_STD_SHARED_PTR_ARRAYS
+  std::cout << "Copying and destroying shared array multi-threaded (shared ptr arrays): ";
+  report( testSharedArrayMultiThreaded< FIX::shared_array_adapter_helper<FIX::shared_ptr_array_strategy>::type, 50000 >( count ), count);
+#endif
+
+#ifdef HAVE_STD_SHARED_PTR_CUSTOM_DELETER
+  std::cout << "Copying and destroying shared array multi-threaded (custom deleter): ";
+  report( testSharedArrayMultiThreaded< FIX::shared_array_adapter_helper<FIX::shared_ptr_custom_deleter>::type, 50000 >( count ), count);
 #endif
 
   std::cout << "Creating Heartbeat messages: ";
@@ -275,6 +296,39 @@ long testStringToDouble( int count )
   return GetTickCount() - start;
 }
 
+template< template< typename > class ArrayType, std::size_t N >
+long testSharedArrayMultiThreaded( int count )
+{
+  long start = GetTickCount();
+
+  using shared_array_type = ArrayType< int >;
+  auto array = shared_array_type::create( count );
+  array[count - 1] = count;
+
+  std::vector< std::thread > threads;
+  threads.reserve( N );
+
+  for ( auto i = 0; i < N; ++ i )
+  {
+    threads.emplace_back(
+        [ & array, count ]()
+        {
+          shared_array_type a = array;
+          shared_array_type b(array);
+          if (a[count - 1] != count || b[count - 1] != count )
+          {
+            std::terminate();
+          }
+        });
+  }
+
+  for ( auto & thread : threads )
+  {
+    thread.join();
+  }
+
+  return GetTickCount() - start;
+}
 
 template< template< typename > class ArrayType >
 long testSharedArray( int count )
@@ -283,12 +337,12 @@ long testSharedArray( int count )
 
   using shared_array_type = ArrayType< int >;
   auto array = shared_array_type::create( count );
-  array[count - 1] = 666;
+  array[count - 1] = count;
   std::vector< shared_array_type > vec( count, array );
   auto copy = vec;
   for ( const auto & e : copy )
   {
-    if ( e[ count - 1 ] != 666 )
+    if ( e[ count - 1 ] != count )
     {
       std::terminate( );
     }
