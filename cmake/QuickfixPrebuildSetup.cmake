@@ -13,6 +13,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Acce
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Application.h ${PROJECT_SOURCE_DIR}/include/quickfix/Application.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/AtomicCount.h ${PROJECT_SOURCE_DIR}/include/quickfix/AtomicCount.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/config-all.h ${PROJECT_SOURCE_DIR}/include/quickfix/config-all.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/config_shared_array.h ${PROJECT_SOURCE_DIR}/include/quickfix/config_shared_array.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/DatabaseConnectionID.h ${PROJECT_SOURCE_DIR}/include/quickfix/DatabaseConnectionID.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/DatabaseConnectionPool.h ${PROJECT_SOURCE_DIR}/include/quickfix/DatabaseConnectionPool.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/DataDictionary.h ${PROJECT_SOURCE_DIR}/include/quickfix/DataDictionary.h
@@ -21,6 +22,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Dict
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/dirent_windows.h ${PROJECT_SOURCE_DIR}/include/quickfix/dirent_windows.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/DOMDocument.h ${PROJECT_SOURCE_DIR}/include/quickfix/DOMDocument.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Event.h ${PROJECT_SOURCE_DIR}/include/quickfix/Event.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Except.h ${PROJECT_SOURCE_DIR}/include/quickfix/Except.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Exceptions.h ${PROJECT_SOURCE_DIR}/include/quickfix/Exceptions.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Field.h ${PROJECT_SOURCE_DIR}/include/quickfix/Field.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/FieldConvertors.h ${PROJECT_SOURCE_DIR}/include/quickfix/FieldConvertors.h
@@ -69,6 +71,8 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Sess
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SessionState.h ${PROJECT_SOURCE_DIR}/include/quickfix/SessionState.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/Settings.h ${PROJECT_SOURCE_DIR}/include/quickfix/Settings.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SharedArray.h ${PROJECT_SOURCE_DIR}/include/quickfix/SharedArray.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SharedArrayAdapter.h ${PROJECT_SOURCE_DIR}/include/quickfix/SharedArrayAdapter.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SharedArrayImpl.h ${PROJECT_SOURCE_DIR}/include/quickfix/SharedArrayImpl.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SocketAcceptor.h ${PROJECT_SOURCE_DIR}/include/quickfix/SocketAcceptor.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SocketConnection.h ${PROJECT_SOURCE_DIR}/include/quickfix/SocketConnection.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/src/C++/SocketConnector.h ${PROJECT_SOURCE_DIR}/include/quickfix/SocketConnector.h

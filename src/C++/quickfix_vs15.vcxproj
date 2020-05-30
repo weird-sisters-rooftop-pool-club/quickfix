@@ -672,6 +672,8 @@
     <ClInclude Include="SessionState.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SharedArray.h" />
+    <ClInclude Include="SharedArrayImpl.h" />
+    <ClInclude Include="SharedArrayAdapter.h" />
     <ClInclude Include="SocketAcceptor.h" />
     <ClInclude Include="SocketConnection.h" />
     <ClInclude Include="SocketConnector.h" />
