@@ -1,12 +1,12 @@
 add_subdirectory(C++)
 
-if( WIN32 OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+if( WIN32 OR APPLE OR ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
 
 add_executable(at at.cpp getopt.c)
 
 target_include_directories(at PRIVATE ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/UnitTest++/src)
-
+  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/googletest)
+  
 target_link_libraries(at ${PROJECT_NAME})
 
 if (NOT WIN32)
@@ -22,10 +22,13 @@ endif()
 
 if (WIN32)
 set (ut_SOURCES
+${PROJECT_SOURCE_DIR}/src/C++/test/DataDictionaryProviderTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/DataDictionaryTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/DictionaryTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/FieldBaseTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/FieldConvertorsTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/FieldMapTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/FieldTypesTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/FileLogTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/FileStoreFactoryTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/FileStoreTestCase.cpp
@@ -44,24 +47,29 @@ ${PROJECT_SOURCE_DIR}/src/C++/test/PostgreSQLStoreTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SessionFactoryTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SessionIDTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SessionSettingsTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/SessionStateTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SessionTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SettingsTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/SharedArrayTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SocketAcceptorTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/SocketConnectionTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SocketConnectorTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/SocketMonitorTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/SocketServerTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/StringUtilitiesTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/TestHelper.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/TimeRangeTestCase.cpp
 ${PROJECT_SOURCE_DIR}/src/C++/test/UtcTimeOnlyTestCase.cpp
-${PROJECT_SOURCE_DIR}/src/C++/test/UtcTimeStampTestCase.cpp)
+${PROJECT_SOURCE_DIR}/src/C++/test/UtcTimeStampTestCase.cpp
+${PROJECT_SOURCE_DIR}/src/C++/test/UtilityTestCase.cpp)
 endif()
 
 add_executable(ut ut.cpp getopt.c ${ut_SOURCES})
 
 target_include_directories(ut PRIVATE ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/UnitTest++/src ${PROJECT_SOURCE_DIR}/src/C++/test/)
-
-target_link_libraries(ut ${PROJECT_NAME} UnitTest++)
+  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/googletest ${PROJECT_SOURCE_DIR}/src/C++/test/)
+  
+target_link_libraries(ut ${PROJECT_NAME})
 
 if (NOT WIN32)
 ADD_CUSTOM_TARGET(ut_target ALL
@@ -76,8 +84,8 @@ endif()
 add_executable(pt pt.cpp getopt.c)
 
 target_include_directories(pt PRIVATE ${PROJECT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/UnitTest++/src)
-
+  ${PROJECT_SOURCE_DIR}/src/C++ ${PROJECT_SOURCE_DIR}/googletest)
+  
 target_link_libraries(pt ${PROJECT_NAME})
 
 if (NOT WIN32)
