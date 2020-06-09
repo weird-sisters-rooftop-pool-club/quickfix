@@ -63,13 +63,15 @@ if (HAVE_SSL)
 endif()
 
 if (WIN32)
-  add_library(${PROJECT_NAME} STATIC  ${quickfix_SOURCES})
+  add_library(${PROJECT_NAME} STATIC ${quickfix_SOURCES})
+  target_link_libraries(${PROJECT_NAME} PUBLIC ws2_32)
   set_target_properties (${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
-  target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES} ${MYSQL_CLIENT_LIBS} ${PostgreSQL_LIBRARIES} ws2_32)
 else()
-  add_library(${PROJECT_NAME} SHARED  ${quickfix_SOURCES})
-  target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES} ${MYSQL_CLIENT_LIBS} ${PostgreSQL_LIBRARIES} pthread)
+  add_library(${PROJECT_NAME} SHARED ${quickfix_SOURCES})
+  target_link_libraries(${PROJECT_NAME} PUBLIC pthread)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MYSQL_CLIENT_LIBS} ${PostgreSQL_LIBRARIES} ${CONAN_LIBS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/C++)
 
