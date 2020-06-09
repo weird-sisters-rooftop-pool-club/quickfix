@@ -2,7 +2,7 @@ if (HAVE_SSL AND WIN32)
 set(applink_SOURCE ${OPENSSL_INCLUDE_DIR}/openssl/applink.c)
 endif()
 
-add_executable(ordermatch Application.cpp Market.cpp ordermatch.cpp ${applink_SOURCE})
+add_executable(ordermatch Application.cpp Market.cpp ordermatch.cpp)
 
 target_include_directories(ordermatch PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/quickfix ${CMAKE_SOURCE_DIR})
 

@@ -2,7 +2,7 @@ if (HAVE_SSL AND WIN32)
 set(applink_SOURCE ${OPENSSL_INCLUDE_DIR}/openssl/applink.c)
 endif()
 
-add_executable(tradeclient Application.cpp tradeclient.cpp ${applink_SOURCE})
+add_executable(tradeclient Application.cpp tradeclient.cpp)
 
 target_include_directories(tradeclient PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/quickfix ${CMAKE_SOURCE_DIR})
 
