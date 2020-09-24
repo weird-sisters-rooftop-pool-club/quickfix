@@ -35,12 +35,12 @@ typedef int socklen_t;
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <poll.h>
 #endif
 
 #include <set>
 #include <queue>
 #include <time.h>
-#include <poll.h>
 
 #include "Utility.h"
 

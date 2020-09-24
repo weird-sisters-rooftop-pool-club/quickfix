@@ -21,6 +21,7 @@
 #include "stdafx.h"
 #else
 #include "config.h"
+#include <poll.h>
 #endif
 
 #include "ThreadedSocketConnection.h"
@@ -29,7 +30,6 @@
 #include "Session.h"
 #include "Utility.h"
 
-#include <poll.h>
 
 namespace FIX
 {
