@@ -6,6 +6,10 @@ add_executable(at at.cpp getopt.c)
 
 target_include_directories(at PRIVATE ${CMAKE_SOURCE_DIR} 
   ${CMAKE_SOURCE_DIR}/src/C++ ${CMAKE_SOURCE_DIR}/UnitTest++/src)
+
+if (WIN32)
+  target_include_directories(at PRIVATE ${CMAKE_SOURCE_DIR}/src/C++/WIN32)
+endif()
   
 target_link_libraries(at ${PROJECT_NAME})
 
@@ -22,7 +26,7 @@ endif()
 
 if (WIN32)
 set (ut_SOURCES 
-${CMAKE_SOURCE_DIR}/src/C++/test/DataDictionaryTestCase.cpp
+# ${CMAKE_SOURCE_DIR}/src/C++/test/DataDictionaryTestCase.cpp
 ${CMAKE_SOURCE_DIR}/src/C++/test/DictionaryTestCase.cpp
 ${CMAKE_SOURCE_DIR}/src/C++/test/FieldBaseTestCase.cpp
 ${CMAKE_SOURCE_DIR}/src/C++/test/FieldConvertorsTestCase.cpp
@@ -60,6 +64,10 @@ add_executable(ut ut.cpp getopt.c ${ut_SOURCES})
 
 target_include_directories(ut PRIVATE ${CMAKE_SOURCE_DIR} 
   ${CMAKE_SOURCE_DIR}/src/C++ ${CMAKE_SOURCE_DIR}/UnitTest++/src ${CMAKE_SOURCE_DIR}/src/C++/test/)
+
+if (WIN32)
+  target_include_directories(ut PRIVATE ${CMAKE_SOURCE_DIR}/src/C++/WIN32)
+endif()
   
 target_link_libraries(ut ${PROJECT_NAME} UnitTest++)
 
@@ -79,6 +87,10 @@ target_include_directories(pt PRIVATE ${CMAKE_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/src/C++ ${CMAKE_SOURCE_DIR}/UnitTest++/src)
   
 target_link_libraries(pt ${PROJECT_NAME})
+
+if (WIN32)
+  target_include_directories(pt PRIVATE ${CMAKE_SOURCE_DIR}/src/C++/WIN32)
+endif()
 
 if (NOT WIN32)
 ADD_CUSTOM_TARGET(pt_target ALL

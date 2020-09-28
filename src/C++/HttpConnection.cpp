@@ -21,6 +21,7 @@
 #include "stdafx.h"
 #else
 #include "config.h"
+#include <poll.h>
 #endif
 
 #include "HttpConnection.h"
@@ -29,6 +30,7 @@
 #include "Session.h"
 #include "Utility.h"
 
+
 using namespace HTML;
 
 namespace FIX
@@ -36,8 +38,10 @@ namespace FIX
 HttpConnection::HttpConnection(socket_handle s )
 : m_socket( s )
 {
-  FD_ZERO( &m_fds );
-  FD_SET( m_socket, &m_fds );
+#ifdef _MSC_VER
+  FD_ZERO(&m_fds);
+  FD_SET(m_socket, &m_fds);
+#endif
 }
 
 bool HttpConnection::send( const std::string& msg )
@@ -46,7 +50,7 @@ bool HttpConnection::send( const std::string& msg )
 }
 
 void HttpConnection::disconnect( int error )
-{ 
+{
   if( error > 0 )
     send( HttpMessage::createResponse(error) );
 
@@ -55,13 +59,23 @@ void HttpConnection::disconnect( int error )
 
 bool HttpConnection::read()
 {
+#if _MSC_VER
   struct timeval timeout = { 2, 0 };
   fd_set readset = m_fds;
+#else
+  int timeout = 2000; // 2000ms = 2 seconds
+  struct pollfd pfd = { m_socket, POLLIN | POLLPRI, 0 };
+#endif
 
   try
   {
+#if _MSC_VER
     // Wait for input (1 second timeout)
-    int result = select( 1 + m_socket, &readset, 0, 0, &timeout );
+    int result = select(1 + m_socket, &readset, 0, 0, &timeout);
+#else
+    // Wait for input (2 second timeout)
+    int result = poll( &pfd, 1, timeout );
+#endif
 
     if( result > 0 ) // Something to read
     {
@@ -97,8 +111,8 @@ EXCEPT ( SocketRecvFailed )
   {
     return m_parser.readHttpMessage( msg );
   }
-  catch ( MessageParseError& ) 
-  { 
+  catch ( MessageParseError& )
+  {
     disconnect( 400 );
   }
   return true;
@@ -114,7 +128,7 @@ void HttpConnection::processStream()
     HttpMessage request( msg );
     processRequest( request );
   }
-  catch( InvalidMessage& ) 
+  catch( InvalidMessage& )
   {
     disconnect( 400 );
     return;

@@ -4,6 +4,7 @@ if (NOT WIN32)
 add_custom_target(QUICKFIX_HEADERS_LINK ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/include/
     COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/src/C++ ${CMAKE_SOURCE_DIR}/include/quickfix
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/src/C++/UNIX/SocketMonitor.h ${CMAKE_SOURCE_DIR}/src/C++/SocketMonitor.h
 )
 else()
 add_custom_target(QUICKFIX_HEADERS_COPY ALL 
@@ -21,6 +22,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Dictio
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/dirent_windows.h ${CMAKE_SOURCE_DIR}/include/quickfix/dirent_windows.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/DOMDocument.h ${CMAKE_SOURCE_DIR}/include/quickfix/DOMDocument.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Event.h ${CMAKE_SOURCE_DIR}/include/quickfix/Event.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Except.h ${CMAKE_SOURCE_DIR}/include/quickfix/Except.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Exceptions.h ${CMAKE_SOURCE_DIR}/include/quickfix/Exceptions.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Field.h ${CMAKE_SOURCE_DIR}/include/quickfix/Field.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/FieldConvertors.h ${CMAKE_SOURCE_DIR}/include/quickfix/FieldConvertors.h
@@ -73,7 +75,7 @@ COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/Socket
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnection.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnection.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketConnector.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketConnector.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketInitiator.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketInitiator.h
-COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketMonitor.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketMonitor.h
+COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/WIN32/SocketMonitor.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketMonitor.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SocketServer.h ${CMAKE_SOURCE_DIR}/include/quickfix/SocketServer.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SSLSocketAcceptor.h ${CMAKE_SOURCE_DIR}/include/quickfix/SSLSocketAcceptor.h
 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/src/C++/SSLSocketConnection.h ${CMAKE_SOURCE_DIR}/include/quickfix/SSLSocketConnection.h
